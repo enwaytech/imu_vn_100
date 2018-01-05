@@ -14,9 +14,11 @@
 
     <!-- Binary settings -->
     <arg name="binary_output" default="true"/>
-    <arg name="binary_async_mode" default="2"/>
+    <arg name="binary_async_mode" default="1"/>
 
-    <arg name="imu_compensated" default="false"/>
+    <arg name="tf_ned_to_enu" default="true"/>
+
+    <arg name="imu_compensated" default="true"/>
 
     <!-- VPE settings -->
     <arg name="vpe_enable" default="true"/>
@@ -38,6 +40,7 @@
         <param name="binary_output" type="bool" value="$(arg binary_output)"/>
         <param name="binary_async_mode" type="int" value="$(arg binary_async_mode)"/>
         <param name="imu_compensated" type="bool" value="$(arg imu_compensated)"/>
+        <param name="tf_ned_to_enu" type="bool" value="$(arg tf_ned_to_enu)"/>
         <param name="enable_mag" type="bool" value="$(arg enable_mag)"/>
         <param name="enable_pres" type="bool" value="$(arg enable_pres)"/>
         <param name="enable_temp" type="bool" value="$(arg enable_temp)"/>
