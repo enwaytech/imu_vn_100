@@ -577,21 +577,21 @@ geometry_msgs::Quaternion BodyFixedNEDtoENU(
 }
 
 geometry_msgs::Vector3 WorldNEDtoENU(const geometry_msgs::Vector3& ned) {
-  // (x y z) -> (y  x -z)  y = z z = y x = -x
+  // (x y z) -> (y  x -z)
   geometry_msgs::Vector3 enu;
-  enu.x = -ned.y;
-  enu.y = -ned.z;
-  enu.z = ned.x;
+  enu.x = ned.y;
+  enu.y = ned.x;
+  enu.z = -ned.z;
   return enu;
 }
 
 geometry_msgs::Quaternion WorldNEDtoENU(const geometry_msgs::Quaternion& ned) {
-  // (x y z w)->(y  x -z w) y = z z = y x = -x
+  // (x y z w)->(y  x -z w)
   geometry_msgs::Quaternion enu;
   enu.w = ned.w;
-  enu.x = -ned.y;
-  enu.y = -ned.z;
-  enu.z = ned.x;
+  enu.x = ned.y;
+  enu.y = ned.x;
+  enu.z = -ned.z;
   return enu;
 }
 

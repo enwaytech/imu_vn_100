@@ -22,7 +22,7 @@
 
     <!-- VPE settings -->
     <arg name="vpe_enable" default="true"/>
-    <arg name="vpe_heading_mode" default="0"/>
+    <arg name="vpe_heading_mode" default="1"/>
     <arg name="vpe_filtering_mode" default="1"/>
     <arg name="vpe_tuning_mode" default="1"/>
 
