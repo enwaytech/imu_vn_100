@@ -556,27 +556,8 @@ void RosQuaternionFromVnQuaternion(geometry_msgs::Quaternion& ros_quat,
   ros_quat.w = vn_quat.w;
 }
 
-geometry_msgs::Vector3 WorldNEDtoENU(const geometry_msgs::Vector3& ned) {
-  // (x y z) -> (y  x -z) x = z z= x y = -y
-  geometry_msgs::Vector3 enu;
-  enu.x = -ned.z;
-  enu.y = -ned.x;
-  enu.z = ned.y;
-  return enu;
-}
-
-geometry_msgs::Quaternion WorldNEDtoENU(const geometry_msgs::Quaternion& ned) {
-  // (x y z w)->(y  x -z w)
-  geometry_msgs::Quaternion enu;
-  enu.w = ned.w;
-  enu.x = -ned.z;
-  enu.y = -ned.x;
-  enu.z = ned.y;
-  return enu;
-}
-
 geometry_msgs::Vector3 BodyFixedNEDtoENU(const geometry_msgs::Vector3 ned) {
-  // (x y z)->(x -y -z)
+  // (x y z)->(x -y -z) x = z z= x y = -y
   geometry_msgs::Vector3 enu;
   enu.x = -ned.z;
   enu.y = ned.y;
@@ -586,11 +567,30 @@ geometry_msgs::Vector3 BodyFixedNEDtoENU(const geometry_msgs::Vector3 ned) {
 
 geometry_msgs::Quaternion BodyFixedNEDtoENU(
   const geometry_msgs::Quaternion& ned) {
-  // (x y z w)->(x -y -z w)
+  // (x y z w)->(x -y -z w) x = z z= x y = -y
   geometry_msgs::Quaternion enu;
   enu.w = ned.w;
   enu.x = -ned.z;
   enu.y = ned.y;
+  enu.z = ned.x;
+  return enu;
+}
+
+geometry_msgs::Vector3 WorldNEDtoENU(const geometry_msgs::Vector3& ned) {
+  // (x y z) -> (y  x -z)  y = z z = y x = -x
+  geometry_msgs::Vector3 enu;
+  enu.x = -ned.y;
+  enu.y = -ned.z;
+  enu.z = ned.x;
+  return enu;
+}
+
+geometry_msgs::Quaternion WorldNEDtoENU(const geometry_msgs::Quaternion& ned) {
+  // (x y z w)->(y  x -z w) y = z z = y x = -x
+  geometry_msgs::Quaternion enu;
+  enu.w = ned.w;
+  enu.x = -ned.y;
+  enu.y = -ned.z;
   enu.z = ned.x;
   return enu;
 }
