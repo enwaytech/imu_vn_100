@@ -18,6 +18,7 @@
 #define IMU_VN_100_ROS_H_
 
 #include <ros/ros.h>
+#include <vector>
 #include <diagnostic_updater/diagnostic_updater.h>
 #include <diagnostic_updater/publisher.h>
 #include <sensor_msgs/Imu.h>
@@ -136,6 +137,10 @@ class ImuVn100 {
   VnVector3 vpe_accel_base_tuning_;
   VnVector3 vpe_accel_adaptive_tuning_;
   VnVector3 vpe_accel_adaptive_filtering_;
+
+  std::vector<double> orientation_covariance_;
+  std::vector<double> angular_velocity_covariance_;
+  std::vector<double> linear_acceleration_covariance_;
 
   SyncInfo sync_info_;
 

@@ -155,6 +155,10 @@ void ImuVn100::LoadParameters() {
   pnh_.param("vpe/accel_tuning/adaptive_filtering/y", vpe_accel_adaptive_filtering_.c1, 4.0);
   pnh_.param("vpe/accel_tuning/adaptive_filtering/z", vpe_accel_adaptive_filtering_.c2, 4.0);
 
+  pnh_.param("orientation_covariance", orientation_covariance_, std::vector<double>(9, -1));
+  pnh_.param("angular_velocity_covariance", angular_velocity_covariance_, std::vector<double>(9, -1));
+  pnh_.param("linear_acceleration_covariance", linear_acceleration_covariance_, std::vector<double>(9, -1));
+
   FixImuRate();
   sync_info_.FixSyncRate();
 }
@@ -448,6 +452,12 @@ void ImuVn100::PublishData(const VnDeviceCompositeData& data) {
   sensor_msgs::Imu imu_msg;
   imu_msg.header.stamp = ros::Time::now();
   imu_msg.header.frame_id = frame_id_;
+
+  for(int i = 0; i < 9; i++) {
+	  imu_msg.orientation_covariance[i] = orientation_covariance_[i];
+	  imu_msg.angular_velocity_covariance[i] = angular_velocity_covariance_[i];
+	  imu_msg.linear_acceleration_covariance[i] = linear_acceleration_covariance_[i];
+  }
 
   if (imu_compensated_) {
     RosVector3FromVnVector3(imu_msg.linear_acceleration, data.acceleration);
