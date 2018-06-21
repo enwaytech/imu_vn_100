@@ -18,6 +18,17 @@
 
     <arg name="tf_ned_to_enu" default="true"/>
 
+    <!-- IMU body frame rotation matrix -->
+    <arg name="c00" default="1.0"/>
+    <arg name="c01" default="0.0"/>
+    <arg name="c02" default="0.0"/>
+    <arg name="c10" default="0.0"/>
+    <arg name="c11" default="1.0"/>
+    <arg name="c12" default="0.0"/>
+    <arg name="c20" default="0.0"/>
+    <arg name="c21" default="0.0"/>
+    <arg name="c22" default="1.0"/>
+
     <arg name="imu_compensated" default="true"/>
 
     <!-- VPE settings -->
@@ -33,23 +44,32 @@
     <arg name="enable_rpy" default="false"/>
 
     <node pkg="imu_vn_100" name="$(arg imu)" type="imu_vn_100_cont_node" output="$(arg output)">
-        <param name="port" type="string" value="$(arg port)"/>
-        <param name="baudrate" type="int" value="$(arg baudrate)"/>
-        <param name="frame_id" type="string" value="$(arg frame_id)"/>
-        <param name="imu_rate" type="int" value="$(arg imu_rate)"/>
-        <param name="binary_output" type="bool" value="$(arg binary_output)"/>
-        <param name="binary_async_mode" type="int" value="$(arg binary_async_mode)"/>
-        <param name="imu_compensated" type="bool" value="$(arg imu_compensated)"/>
-        <param name="tf_ned_to_enu" type="bool" value="$(arg tf_ned_to_enu)"/>
-        <param name="enable_mag" type="bool" value="$(arg enable_mag)"/>
-        <param name="enable_pres" type="bool" value="$(arg enable_pres)"/>
-        <param name="enable_temp" type="bool" value="$(arg enable_temp)"/>
-        <param name="enable_rpy" type="bool" value="$(arg enable_rpy)"/>
-        <param name="sync_rate" type="int" value="$(arg sync_rate)"/>
-        <param name="sync_pulse_width_us" type="int" value="$(arg sync_pulse_width_us)"/>
-        <param name="vpe/enable" type="bool" value="$(arg vpe_enable)"/>
-        <param name="vpe/heading_mode" type="int" value="$(arg vpe_heading_mode)"/>
-        <param name="vpe/filtering_mode" type="int" value="$(arg vpe_filtering_mode)"/>
-        <param name="vpe/tuning_mode" type="int" value="$(arg vpe_tuning_mode)"/>
+      <param name="port" type="string" value="$(arg port)"/>
+      <param name="baudrate" type="int" value="$(arg baudrate)"/>
+      <param name="frame_id" type="string" value="$(arg frame_id)"/>
+      <param name="imu_rate" type="int" value="$(arg imu_rate)"/>
+      <param name="binary_output" type="bool" value="$(arg binary_output)"/>
+      <param name="binary_async_mode" type="int" value="$(arg binary_async_mode)"/>
+      <param name="imu_compensated" type="bool" value="$(arg imu_compensated)"/>
+      <param name="tf_ned_to_enu" type="bool" value="$(arg tf_ned_to_enu)"/>
+      <param name="enable_mag" type="bool" value="$(arg enable_mag)"/>
+      <param name="enable_pres" type="bool" value="$(arg enable_pres)"/>
+      <param name="enable_temp" type="bool" value="$(arg enable_temp)"/>
+      <param name="enable_rpy" type="bool" value="$(arg enable_rpy)"/>
+      <param name="sync_rate" type="int" value="$(arg sync_rate)"/>
+      <param name="sync_pulse_width_us" type="int" value="$(arg sync_pulse_width_us)"/>
+      <param name="vpe/enable" type="bool" value="$(arg vpe_enable)"/>
+      <param name="vpe/heading_mode" type="int" value="$(arg vpe_heading_mode)"/>
+      <param name="vpe/filtering_mode" type="int" value="$(arg vpe_filtering_mode)"/>
+      <param name="vpe/tuning_mode" type="int" value="$(arg vpe_tuning_mode)"/>
+      <param name="c00" type="double" value="$(arg c00)"/>
+      <param name="c01" type="double" value="$(arg c01)"/>
+      <param name="c02" type="double" value="$(arg c02)"/>
+      <param name="c10" type="double" value="$(arg c10)"/>
+      <param name="c11" type="double" value="$(arg c11)"/>
+      <param name="c12" type="double" value="$(arg c12)"/>
+      <param name="c20" type="double" value="$(arg c20)"/>
+      <param name="c21" type="double" value="$(arg c21)"/>
+      <param name="c22" type="double" value="$(arg c22)"/>
     </node>
 </launch>
