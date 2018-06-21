@@ -36,7 +36,8 @@ void RosQuaternionFromVnQuaternion(geometry_msgs::Quaternion& ros_quat,
                                    const VnQuaternion& vn_quat);
 
 geometry_msgs::Vector3 rotateVector(const VnMatrix3x3 rotation_Matrix,
-                                    const geometry_msgs::Vector3 input_vector)
+                                    const geometry_msgs::Vector3 input_vector);
+
 geometry_msgs::Vector3 WorldNEDtoENU(const geometry_msgs::Vector3& ned);
 geometry_msgs::Quaternion WorldNEDtoENU(const geometry_msgs::Quaternion& ned);
 geometry_msgs::Vector3 BodyFixedNEDtoENU(const geometry_msgs::Vector3 ned);
@@ -594,9 +595,9 @@ geometry_msgs::Vector3 rotateVector(const VnMatrix3x3 rotation_Matrix, const geo
 geometry_msgs::Vector3 BodyFixedNEDtoENU(const geometry_msgs::Vector3 ned) {
   // (x y z)->(x -y -z) x = z z= x y = -y
   geometry_msgs::Vector3 enu;
-  enu.x = -ned.z;
-  enu.y = ned.y;
-  enu.z = ned.x;
+  enu.x = ned.x;
+  enu.y = -ned.y;
+  enu.z = -ned.z;
   return enu;
 }
 
@@ -605,9 +606,9 @@ geometry_msgs::Quaternion BodyFixedNEDtoENU(
   // (x y z w)->(x -y -z w) x = z z= x y = -y
   geometry_msgs::Quaternion enu;
   enu.w = ned.w;
-  enu.x = -ned.z;
-  enu.y = ned.y;
-  enu.z = ned.x;
+  enu.x = ned.x;
+  enu.y = -ned.y;
+  enu.z = -ned.z;
   return enu;
 }
 
