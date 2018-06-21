@@ -593,7 +593,7 @@ geometry_msgs::Vector3 rotateVector(const VnMatrix3x3 rotation_Matrix, const geo
 }
 
 geometry_msgs::Vector3 BodyFixedNEDtoENU(const geometry_msgs::Vector3 ned) {
-  // (x y z)->(x -y -z) x = z z= x y = -y
+  // (x y z)->(x -y -z)
   geometry_msgs::Vector3 enu;
   enu.x = ned.x;
   enu.y = -ned.y;
@@ -603,7 +603,7 @@ geometry_msgs::Vector3 BodyFixedNEDtoENU(const geometry_msgs::Vector3 ned) {
 
 geometry_msgs::Quaternion BodyFixedNEDtoENU(
   const geometry_msgs::Quaternion& ned) {
-  // (x y z w)->(x -y -z w) x = z z= x y = -y
+  // (x y z w)->(x -y -z w)
   geometry_msgs::Quaternion enu;
   enu.w = ned.w;
   enu.x = ned.x;
