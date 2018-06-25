@@ -16,6 +16,8 @@
 
 #include <imu_vn_100/imu_vn_100.h>
 
+#include <tf2/LinearMath/Quaternion.h>
+
 #include <geometry_msgs/Vector3Stamped.h>
 
 namespace imu_vn_100 {
@@ -34,9 +36,6 @@ void RosVector3FromVnVector3(geometry_msgs::Vector3& ros_vec3,
                              const VnVector3& vn_vec3);
 void RosQuaternionFromVnQuaternion(geometry_msgs::Quaternion& ros_quat,
                                    const VnQuaternion& vn_quat);
-
-geometry_msgs::Vector3 rotateVector(const VnMatrix3x3 rotation_Matrix,
-                                    const geometry_msgs::Vector3 input_vector);
 
 geometry_msgs::Vector3 WorldNEDtoENU(const geometry_msgs::Vector3& ned);
 geometry_msgs::Quaternion WorldNEDtoENU(const geometry_msgs::Quaternion& ned);
@@ -130,15 +129,16 @@ void ImuVn100::LoadParameters() {
 
   pnh_.param("tf_ned_to_enu", tf_ned_to_enu_, false);
 
-  pnh_.param("c00", rotation_body_imu_.c00, 1.0);
-  pnh_.param("c01", rotation_body_imu_.c01, 0.0);
-  pnh_.param("c02", rotation_body_imu_.c02, 0.0);
-  pnh_.param("c10", rotation_body_imu_.c10, 0.0);
-  pnh_.param("c11", rotation_body_imu_.c11, -1.0);
-  pnh_.param("c12", rotation_body_imu_.c12, 0.0);
-  pnh_.param("c20", rotation_body_imu_.c20, 0.0);
-  pnh_.param("c21", rotation_body_imu_.c21, 0.0);
-  pnh_.param("c22", rotation_body_imu_.c22, -1.0);
+  pnh_.param("rpy", rotation_rpy_body_);
+
+  if (rotation_rpy_body_.size() == 3)
+  {
+    rotation_quaternion_body_.setRPY(rotation_rpy_body_.at(0), rotation_rpy_body_.at(1), rotation_rpy_body_.at(2));
+  }
+  else
+  {
+    rotation_quaternion_body_.setRPY(0.0, 0.0, 0.0);
+  }
 
   pnh_.param("imu_compensated", imu_compensated_, false);
 
@@ -484,8 +484,15 @@ void ImuVn100::PublishData(const VnDeviceCompositeData& data) {
                             data.angularRateUncompensated);
   }
 
-  imu_msg.angular_velocity = rotateVector(rotation_body_imu_, imu_msg.angular_velocity);
-  imu_msg.linear_acceleration = rotateVector(rotation_body_imu_, imu_msg.linear_acceleration);
+  tf2::Vector3 temp_vec;
+
+  tf2::convert(imu_msg.angular_velocity, temp_vec);
+  temp_vec = tf2::quatRotate(rotation_quaternion_body_, temp_vec);
+  tf2::convert(temp_vec, imu_msg.angular_velocity);
+
+  tf2::convert(imu_msg.linear_acceleration, temp_vec);
+  temp_vec = tf2::quatRotate(rotation_quaternion_body_, temp_vec);
+  tf2::convert(temp_vec, imu_msg.linear_acceleration);
 
   if (binary_output_) {
     RosQuaternionFromVnQuaternion(imu_msg.orientation, data.quaternion);
@@ -581,15 +588,6 @@ void RosQuaternionFromVnQuaternion(geometry_msgs::Quaternion& ros_quat,
   ros_quat.y = vn_quat.y;
   ros_quat.z = vn_quat.z;
   ros_quat.w = vn_quat.w;
-}
-
-geometry_msgs::Vector3 rotateVector(const VnMatrix3x3 rotation_Matrix, const geometry_msgs::Vector3 input_vector)
-{
-  geometry_msgs::Vector3 rotated_vector;
-  rotated_vector.x = rotation_Matrix.c00*input_vector.x + rotation_Matrix.c01*input_vector.y + rotation_Matrix.c02*input_vector.z;
-  rotated_vector.y = rotation_Matrix.c10*input_vector.x + rotation_Matrix.c11*input_vector.y + rotation_Matrix.c12*input_vector.z;
-  rotated_vector.z = rotation_Matrix.c20*input_vector.x + rotation_Matrix.c21*input_vector.y + rotation_Matrix.c22*input_vector.z;
-  return rotated_vector;
 }
 
 geometry_msgs::Vector3 BodyFixedNEDtoENU(const geometry_msgs::Vector3 ned) {

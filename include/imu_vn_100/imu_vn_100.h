@@ -17,6 +17,8 @@
 #ifndef IMU_VN_100_ROS_H_
 #define IMU_VN_100_ROS_H_
 
+#include <tf2/utils.h>
+
 #include <ros/ros.h>
 #include <vector>
 #include <diagnostic_updater/diagnostic_updater.h>
@@ -115,7 +117,8 @@ class ImuVn100 {
   double imu_rate_double_ = kDefaultImuRate;
   std::string frame_id_;
 
-  VnMatrix3x3 rotation_body_imu_;
+  std::vector<double> rotation_rpy_body_;
+  tf2::Quaternion rotation_quaternion_body_;
 
   bool enable_mag_ = true;
   bool enable_pres_ = true;

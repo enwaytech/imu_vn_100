@@ -14,7 +14,7 @@
   <depend>diagnostic_updater</depend>
   <depend>roscpp</depend>
   <depend>sensor_msgs</depend>
-
+  <depend>tf2</depend>
 
   <export>
     <!-- Other tools can request additional information be placed here -->
