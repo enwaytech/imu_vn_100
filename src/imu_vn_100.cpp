@@ -492,8 +492,8 @@ void ImuVn100::PublishData(const VnDeviceCompositeData& data) {
   }
   if  (tf_ned_to_enu_) {
     imu_msg.orientation = WorldNEDtoENU(imu_msg.orientation);
-    imu_msg.angular_velocity =  BodyFixedNEDtoENU(imu_msg.angular_velocity);
-    imu_msg.linear_acceleration = BodyFixedNEDtoENU(
+    imu_msg.angular_velocity =  WorldNEDtoENU(imu_msg.angular_velocity);
+    imu_msg.linear_acceleration = WorldNEDtoENU(
       imu_msg.linear_acceleration);
   }
   pd_imu_.Publish(imu_msg);
