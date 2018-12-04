@@ -129,10 +129,6 @@ void ImuVn100::LoadParameters() {
 
   pnh_.param("tf_ned_to_enu", tf_ned_to_enu_, false);
 
-  pnh_.param("rotation_rpy_body", rotation_rpy_body_, rotation_rpy_body_);
-
-  rotation_quaternion_body_.setRPY(rotation_rpy_body_.at(0), rotation_rpy_body_.at(1), rotation_rpy_body_.at(2));
-
   pnh_.param("imu_compensated", imu_compensated_, false);
 
   pnh_.param("vpe/enable", vpe_enable_, true);
@@ -477,23 +473,13 @@ void ImuVn100::PublishData(const VnDeviceCompositeData& data) {
                             data.angularRateUncompensated);
   }
 
-  tf2::Vector3 temp_vec;
-
-  tf2::convert(imu_msg.angular_velocity, temp_vec);
-  temp_vec = tf2::quatRotate(rotation_quaternion_body_, temp_vec);
-  tf2::convert(temp_vec, imu_msg.angular_velocity);
-
-  tf2::convert(imu_msg.linear_acceleration, temp_vec);
-  temp_vec = tf2::quatRotate(rotation_quaternion_body_, temp_vec);
-  tf2::convert(temp_vec, imu_msg.linear_acceleration);
-
   if (binary_output_) {
     RosQuaternionFromVnQuaternion(imu_msg.orientation, data.quaternion);
   }
   if  (tf_ned_to_enu_) {
     imu_msg.orientation = WorldNEDtoENU(imu_msg.orientation);
-    imu_msg.angular_velocity =  BodyFixedNEDtoENU(imu_msg.angular_velocity);
-    imu_msg.linear_acceleration = BodyFixedNEDtoENU(
+    imu_msg.angular_velocity =  WorldNEDtoENU(imu_msg.angular_velocity);
+    imu_msg.linear_acceleration = WorldNEDtoENU(
       imu_msg.linear_acceleration);
   }
   pd_imu_.Publish(imu_msg);
