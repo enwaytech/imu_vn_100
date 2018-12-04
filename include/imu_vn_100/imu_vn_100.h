@@ -117,9 +117,6 @@ class ImuVn100 {
   double imu_rate_double_ = kDefaultImuRate;
   std::string frame_id_;
 
-  std::vector<double> rotation_rpy_body_;
-  tf2::Quaternion rotation_quaternion_body_;
-
   bool enable_mag_ = true;
   bool enable_pres_ = true;
   bool enable_temp_ = true;
